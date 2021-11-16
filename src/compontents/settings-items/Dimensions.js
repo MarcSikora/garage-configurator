@@ -15,6 +15,11 @@ function Dimensions() {
         return sizes;
     }
 
+    const handleWidthChange = (value) => {
+        console.log("handleWidthChange(): ", value);
+
+    }
+
     return (
         <div className="Dimensions">
             <SettingsItem header="Dimensions">
@@ -23,6 +28,7 @@ function Dimensions() {
                         label="Width"
                         unit="m"
                         options={getSizes()}
+                        onChange={handleWidthChange}
                     ></SelectInput>
                     <SelectInput 
                         label="Length"
