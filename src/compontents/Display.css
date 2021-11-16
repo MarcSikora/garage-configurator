@@ -1,0 +1,7 @@
+.Display {
+    flex: 1;
+}
+
+.Display--canvas {
+    border: 2px solid gray;
+}

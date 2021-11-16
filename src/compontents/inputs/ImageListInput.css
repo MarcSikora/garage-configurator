@@ -1,0 +1,10 @@
+.ImageListInput--label {
+    font-weight: bold;
+}
+
+.ImageListInput--content {
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    margin: 5px;
+}

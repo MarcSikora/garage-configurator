@@ -1,0 +1,29 @@
+.SettingsItem {
+    background-color: #e5e5e5;
+    padding: 20px;
+    margin: 10px 20px;
+}
+
+.SettingsItem--header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.SettingsItem--header-text {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.SettingsItem--header-dropdown {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.SettingsItem--header-dropdown:hover {
+    opacity: 1;
+}
+
+.SettingsItem--content {
+    margin: 15px 0;
+}

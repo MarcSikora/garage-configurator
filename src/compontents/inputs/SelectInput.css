@@ -1,0 +1,20 @@
+.SelectInput {
+    margin-right: 20px;
+}
+
+.SelectInput--label {
+    margin: 5px;
+}
+
+.SelectInput--select {
+    background-color: white;
+    padding: 5px;
+    font-size: 12pt;
+    cursor: pointer;
+    border: 2px solid gray;
+    font-weight: bold;
+}
+
+.SelectInput--unit {
+    margin-left: 5px;
+}

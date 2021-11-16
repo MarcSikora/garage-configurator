@@ -1,0 +1,17 @@
+.ImageListInputItem {
+    
+}
+
+.ImageListInputItem:hover {
+    background-color: lightgray;
+} 
+
+.ImageListInputItem--img {
+    width: 90px;
+    border: 3px solid transparent;
+}
+
+.ImageListInputItem--img-selected {
+    width: 90px;
+    border: 3px solid rgb(255, 92, 0);
+}
