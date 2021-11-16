@@ -8,8 +8,7 @@ class Parameters
             height_min: 2,
             height_max: 2.1,
             materialType: 0,
-            material: 0,
-            fittings: 0
+            material: 0
         };
         this.roof = {
             type: 0,
