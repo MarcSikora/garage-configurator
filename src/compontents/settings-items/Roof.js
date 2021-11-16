@@ -8,6 +8,9 @@ import roofTypeFront from '../../imgs/roofTypes/front.png'
 import roofTypeBack from '../../imgs/roofTypes/back.png'
 
 function Roof() {
+    const handleChange = () => {
+
+    }
     const types = [
         {
             id: 0,
@@ -42,6 +45,7 @@ function Roof() {
                     label="Roof type"
                     items={types}
                     value={0}
+                    onChange={handleChange}
                 ></ImageListInput>
             </SettingsItem>
         </div>

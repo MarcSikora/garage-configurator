@@ -11,7 +11,7 @@ function ImageListInputItem(props) {
             <img 
                 className={(props.selected) ? "ImageListInputItem--img-selected" :  "ImageListInputItem--img"}
                 src={props.src}
-                alt={props.alt} 
+                alt={props.alt}
                 onClick={handleClick}
             ></img>
         </div>

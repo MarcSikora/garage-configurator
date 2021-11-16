@@ -5,6 +5,6 @@
 .ImageListInput--content {
     background-color: white;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin: 5px;
 }

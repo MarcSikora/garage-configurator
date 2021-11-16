@@ -4,7 +4,8 @@ import ImageListInputItem from './ImageListInputItem';
 
 function ImageListInput(props) {
     const handleChange = (id) => {
-        console.log(id)
+        console.log(id);
+        props.onChange(id);
     }
 
     return (

@@ -1,7 +1,12 @@
 .Display {
     flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.Display--canvas {
-    border: 2px solid gray;
+.Display--container {
+    border: 3px solid gray;
+    width: 900px;
+    height: 600px;
 }

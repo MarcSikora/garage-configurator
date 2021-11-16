@@ -1,5 +1,5 @@
 .ImageListInputItem {
-    
+    cursor: pointer;
 }
 
 .ImageListInputItem:hover {
@@ -7,11 +7,15 @@
 } 
 
 .ImageListInputItem--img {
-    width: 90px;
     border: 3px solid transparent;
+    margin: 0;
+    padding: 0;
+    display: block;
 }
 
 .ImageListInputItem--img-selected {
-    width: 90px;
     border: 3px solid rgb(255, 92, 0);
+    margin: 0;
+    padding: 0;
+    display: block;
 }

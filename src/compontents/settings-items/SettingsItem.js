@@ -15,7 +15,12 @@ function SettingsItem(props) {
         <div className="SettingsItem">
             <div className="SettingsItem--header">
                 <div className="SettingsItem--header-text">{props.header}</div>
-                <img className="SettingsItem--header-dropdown" src={dropdown} onClick={handleDropdown}></img>
+                <img 
+                    className="SettingsItem--header-dropdown" 
+                    src={dropdown} 
+                    alt="dropdown"
+                    onClick={handleDropdown}
+                ></img>
             </div>   
             {content}
         </div>
