@@ -13,7 +13,7 @@ function Roof() {
         dispatch(changeProperty("roof", "type", id))
     }
 
-    const handleRoofMaterialChange = (type, color) => {
+    const handleMaterialChange = (type, color) => {
         dispatch(changeProperty("roof", "materialType", type));
         dispatch(changeProperty("roof", "material", color));
     }    
@@ -27,7 +27,7 @@ function Roof() {
                     onChange={handleTypeChange}
                 ></ImageListInput>
                 <MaterialInput
-                    onChange={handleRoofMaterialChange}
+                    onChange={handleMaterialChange}
                 ></MaterialInput>
             </SettingsItem>
         </div>
