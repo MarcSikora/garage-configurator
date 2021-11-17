@@ -24,9 +24,17 @@ function MaterialInput(props) {
     }
 
     const handleColorChange = (value) => {
-        setColor(value)
+        setColor(value);
         props.onChange(type, value);
     }
+
+    const imageList = (WallTypes[type].length > 0) ? (
+        <ImageListInput
+            label="Color"
+            items={WallTypes[type]}
+            onChange={handleColorChange}
+        ></ImageListInput>
+    ): null;
 
     return (
         <div className="MaterialInput">
@@ -35,11 +43,7 @@ function MaterialInput(props) {
                 options={getTypes()}
                 onChange={handleTypeChange}
             ></SelectInput>
-            <ImageListInput
-                label="Color"
-                items={WallTypes[type]}
-                onChange={handleColorChange}
-            ></ImageListInput>
+            {imageList}
         </div>
     )
 }

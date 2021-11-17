@@ -1,3 +1,7 @@
+.ImageListInput {
+    margin-top: 20px;
+}
+
 .ImageListInput--label {
     font-weight: bold;
 }
@@ -7,5 +11,4 @@
     display: flex;
     margin: 5px;
     flex-wrap: wrap;
-
 }
