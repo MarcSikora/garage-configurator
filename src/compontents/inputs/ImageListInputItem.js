@@ -14,6 +14,7 @@ function ImageListInputItem(props) {
                 alt={props.alt}
                 onClick={handleClick}
             ></img>
+            <div className="ImageListInputItem--caption">{props.alt}</div>
         </div>
     )
 }
