@@ -2,12 +2,9 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { changeProperty } from '../../actions'
 import ImageListInput from '../inputs/ImageListInput'
+import MaterialInput from '../inputs/MaterialInput'
 import SettingsItem from './SettingsItem'
-import roofTypeLeft from '../../imgs/roofTypes/left.png'
-import roofTypeRight from '../../imgs/roofTypes/right.png'
-import roofTypeGable from '../../imgs/roofTypes/double.png'
-import roofTypeFront from '../../imgs/roofTypes/front.png'
-import roofTypeBack from '../../imgs/roofTypes/back.png'
+import { RoofTypes } from '../../logic/RoofTypes' 
 
 function Roof() {
     const dispatch = useDispatch();
@@ -15,42 +12,23 @@ function Roof() {
     const handleTypeChange = (id) => {
         dispatch(changeProperty("roof", "type", id))
     }
-    const types = [
-        {
-            id: 0,
-            src: roofTypeLeft,
-            caption: "left"
-        },
-        {
-            id: 1,
-            src: roofTypeRight,
-            caption: "right"
-        },
-        {
-            id: 2,
-            src: roofTypeGable,
-            caption: "gable"
-        },
-        {
-            id: 3,
-            src: roofTypeFront,
-            caption: "front"
-        },
-        {
-            id: 4,
-            src: roofTypeBack,
-            caption: "back"
-        }
-    ]
+
+    const handleRoofMaterialChange = (type, color) => {
+        dispatch(changeProperty("roof", "materialType", type));
+        dispatch(changeProperty("roof", "material", color));
+    }    
 
     return (
         <div className="Roof">
             <SettingsItem header="Roof">
                 <ImageListInput
                     label="Roof type"
-                    items={types}
+                    items={RoofTypes}
                     onChange={handleTypeChange}
                 ></ImageListInput>
+                <MaterialInput
+                    onChange={handleRoofMaterialChange}
+                ></MaterialInput>
             </SettingsItem>
         </div>
     )

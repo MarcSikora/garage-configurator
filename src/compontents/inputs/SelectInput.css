@@ -1,9 +1,11 @@
 .SelectInput {
     margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 .SelectInput--label {
-    margin: 5px;
+    margin-right: 5px;
+    font-weight: bold;
 }
 
 .SelectInput--select {

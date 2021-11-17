@@ -1,5 +1,6 @@
 .ImageListInputItem {
     cursor: pointer;
+    display: flex;
 }
 
 .ImageListInputItem:hover {
@@ -11,6 +12,7 @@
     margin: 0;
     padding: 0;
     display: block;
+
 }
 
 .ImageListInputItem--img-selected {
@@ -18,4 +20,5 @@
     margin: 0;
     padding: 0;
     display: block;
+
 }

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
+import { useDispatch } from 'react-redux'
 import {changeProperty} from '../../actions'
 import SettingsItem from './SettingsItem'
 import NumberInput from '../inputs/NumberInput'
