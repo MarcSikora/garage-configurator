@@ -17,10 +17,10 @@ function Heights() {
 
     return (
         <div className="Heights">
-            <SettingsItem header="Heights">
+            <SettingsItem header="Height">
                 <div style={{display: "flex"}}>
                     <NumberInput 
-                        label="Min. height"
+                        label="Minimal"
                         unit="m"
                         min={2}
                         max={3}
@@ -29,7 +29,7 @@ function Heights() {
                         onChange={handleMinHeightChange}
                     ></NumberInput>
                     <NumberInput 
-                        label="Max. height"
+                        label="Maximal"
                         unit="m"
                         min={2.1}
                         max={3.1}
