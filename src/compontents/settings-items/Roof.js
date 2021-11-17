@@ -1,4 +1,6 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { changeProperty } from '../../actions'
 import ImageListInput from '../inputs/ImageListInput'
 import SettingsItem from './SettingsItem'
 import roofTypeLeft from '../../imgs/roofTypes/left.png'
@@ -8,8 +10,10 @@ import roofTypeFront from '../../imgs/roofTypes/front.png'
 import roofTypeBack from '../../imgs/roofTypes/back.png'
 
 function Roof() {
-    const handleChange = () => {
+    const dispatch = useDispatch();
 
+    const handleTypeChange = (id) => {
+        dispatch(changeProperty("roof", "type", id))
     }
     const types = [
         {
@@ -38,14 +42,14 @@ function Roof() {
             caption: "back"
         }
     ]
+
     return (
         <div className="Roof">
             <SettingsItem header="Roof">
                 <ImageListInput
                     label="Roof type"
                     items={types}
-                    value={0}
-                    onChange={handleChange}
+                    onChange={handleTypeChange}
                 ></ImageListInput>
             </SettingsItem>
         </div>

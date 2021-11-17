@@ -1,9 +1,12 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import {changeProperty} from '../../actions'
 import SettingsItem from './SettingsItem'
-import './Dimensions.css'
 import SelectInput from '../inputs/SelectInput'
 
 function Dimensions() {
+    const dispatch = useDispatch();
+
     const getSizes = () => {
         const sizes = [];
 
@@ -16,8 +19,11 @@ function Dimensions() {
     }
 
     const handleWidthChange = (value) => {
-        console.log("handleWidthChange(): ", value);
+        dispatch(changeProperty("garage", "width", value));
+    }
 
+    const handleHeightChange = (value) => {
+        dispatch(changeProperty("garage", "width", value));
     }
 
     return (
@@ -34,6 +40,7 @@ function Dimensions() {
                         label="Length"
                         unit="m"
                         options={getSizes()}
+                        onChange={handleHeightChange}
                     ></SelectInput>
                 </div>
             </SettingsItem>

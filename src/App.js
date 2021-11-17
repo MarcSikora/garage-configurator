@@ -1,10 +1,10 @@
 import './App.css';
 import Display from './compontents/Display';
 import Settings from './compontents/Settings';
-import Parameters from './logic/Parameters'
+import { useSelector } from 'react-redux';
 
 function App() {
-  const parameters = new Parameters();
+  const parameters = useSelector(state => state.parameters);
 
   return (
     <div className="App">

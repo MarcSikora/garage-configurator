@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import Parameters from '../logic/Parameters';
-import Visualisation from '../logic/Visualisation';
+import Parameters from '../logic/Parameters'
+import Visualisation from '../logic/Visualisation'
 import './Display.css'
 
 function Display(props) {

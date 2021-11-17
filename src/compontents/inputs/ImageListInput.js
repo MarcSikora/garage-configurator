@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './ImageListInput.css'
 import ImageListInputItem from './ImageListInputItem';
 
 function ImageListInput(props) {
+    const [selected, setSelected] = useState(0);
+
     const handleChange = (id) => {
-        console.log(id);
+        setSelected(id);
         props.onChange(id);
     }
 
@@ -14,7 +16,7 @@ function ImageListInput(props) {
             <div className="ImageListInput--content">
                 {
                     props.items.map((item, i) => {
-                        let isSelected = (i === props.value);
+                        let isSelected = (i === selected);
                         return (
                             <ImageListInputItem
                                 key={item.id} 

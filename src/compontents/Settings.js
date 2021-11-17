@@ -3,10 +3,13 @@ import Dimensions from './settings-items/Dimensions'
 import Roof from './settings-items/Roof'
 import './Settings.css'
 
-function Settings() {
+function Settings(props) {
     return (
         <div className="Settings">
-            <Dimensions></Dimensions>
+            <Dimensions 
+                width={props.parameters.width}
+                length={props.parameters.length}
+            ></Dimensions>
             <Roof></Roof>
         </div>
     )
