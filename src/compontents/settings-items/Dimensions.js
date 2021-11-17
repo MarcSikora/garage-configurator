@@ -22,8 +22,8 @@ function Dimensions() {
         dispatch(changeProperty("garage", "width", value));
     }
 
-    const handleHeightChange = (value) => {
-        dispatch(changeProperty("garage", "width", value));
+    const handleLengthChange = (value) => {
+        dispatch(changeProperty("garage", "length", value));
     }
 
     return (
@@ -40,7 +40,7 @@ function Dimensions() {
                         label="Length"
                         unit="m"
                         options={getSizes()}
-                        onChange={handleHeightChange}
+                        onChange={handleLengthChange}
                     ></SelectInput>
                 </div>
             </SettingsItem>

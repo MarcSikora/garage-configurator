@@ -5,8 +5,8 @@ class Parameters
         this.garage = {
             width: 2,
             length: 2,
-            height_min: 2,
-            height_max: 2.1,
+            height_min: 2.1,
+            height_max: 2.3,
             materialType: 0,
             material: 0
         };
