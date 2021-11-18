@@ -1,0 +1,12 @@
+.Row {
+    margin-top: 20px;
+}
+
+.Row--label {
+    font-weight: bold;
+}
+
+.Row--content {
+    margin-top: 15px;
+    display: flex;
+}

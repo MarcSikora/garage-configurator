@@ -39,7 +39,7 @@ function MaterialInput(props) {
     return (
         <div className="MaterialInput">
             <SelectInput
-                label="Type"
+                label="Material type"
                 options={getTypes()}
                 onChange={handleTypeChange}
             ></SelectInput>
