@@ -25,6 +25,14 @@ function Gate() {
         dispatch(changeProperty("gate", "material", color));
     }
 
+    const handleWidthChange = (value) => {
+        dispatch(changeProperty("gate", "width", value))
+    }
+
+    const handleHeightChange = (value) => {
+        dispatch(changeProperty("gate", "height", value))
+    }
+
     return (
         <div className="Gate">
             <SettingsItem header="Gate">
@@ -49,6 +57,7 @@ function Gate() {
                         max={3}
                         step={0.1}
                         value={2}
+                        onChange={handleWidthChange}
                     ></NumberInput>
                     <NumberInput
                         label="Height"
@@ -57,6 +66,7 @@ function Gate() {
                         max={2.9}
                         step={0.1}
                         value={1.9}
+                        onChange={handleHeightChange}
                     ></NumberInput>
                 </Row>
             </SettingsItem>
