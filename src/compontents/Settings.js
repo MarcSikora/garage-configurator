@@ -4,6 +4,7 @@ import Gate from './settings-items/Gate'
 import Heights from './settings-items/Heights'
 import Roof from './settings-items/Roof'
 import Walls from './settings-items/Walls'
+import Doors from './settings-items/Doors'
 import './Settings.css'
 
 function Settings(props) {
@@ -14,6 +15,7 @@ function Settings(props) {
             <Heights></Heights>
             <Walls></Walls>
             <Gate></Gate>
+            <Doors doors={props.parameters.doors}></Doors>
         </div>
     )
 }

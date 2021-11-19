@@ -1,0 +1,20 @@
+.ArrayInput--header {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+}
+
+.ArrayInput--header-button {
+    cursor: pointer;
+}
+
+.ArrayInput--header-label {
+    margin-left: 20px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.ArrayInput--content {
+    margin-top: 20px;
+}

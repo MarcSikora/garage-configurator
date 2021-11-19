@@ -3,7 +3,7 @@ import './ImageListInput.css'
 import ImageListInputItem from './ImageListInputItem';
 
 function ImageListInput(props) {
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState(props.value | 0);
 
     const handleChange = (id) => {
         setSelected(id);

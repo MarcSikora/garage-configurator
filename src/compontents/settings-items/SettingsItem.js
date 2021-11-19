@@ -3,7 +3,7 @@ import './SettingsItem.css'
 import dropdown from '../../imgs/ui/dropdown.png'
 
 function SettingsItem(props) {
-    const [isContentVisible, setIsContentVisible] = useState(true);
+    const [isContentVisible, setIsContentVisible] = useState(false);
 
     const handleDropdown = () => {
         setIsContentVisible(!isContentVisible);

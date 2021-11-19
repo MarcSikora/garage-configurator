@@ -3,7 +3,7 @@ import './NumberInput.css'
 
 function NumberInput(props) {
     const handleChange = (e) => {
-        props.onChange(e.currentTarget.value);
+        props.onChange(parseFloat(e.currentTarget.value));
     }
 
     return (

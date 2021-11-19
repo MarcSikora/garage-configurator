@@ -13,7 +13,7 @@ function SelectInput(props) {
     return (
         <div className="SelectInput">
             <label className="SelectInput--label">{props.label}</label>
-            <select className="SelectInput--select" onChange={handleChange}>
+            <select className="SelectInput--select" onChange={handleChange} value={props.value}>
                 {options}
             </select>
             <span className="SelectInput--unit">{props.unit}</span>
