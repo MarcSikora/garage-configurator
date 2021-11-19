@@ -1,10 +1,9 @@
 import React from 'react'
 import './DoorInput.css'
-import NumberInput from './NumberInput'
 import SelectInput from './SelectInput'
 import MaterialInput from './MaterialInput'
-import Row from './Row'
 import remove from '../../imgs/ui/remove.png'
+import SliderInput from './SliderInput'
 
 function DoorInput(props) {
     const wallOptions = ["left", "right", "front", "back"].map((wall, i) => {
@@ -33,23 +32,21 @@ function DoorInput(props) {
             <div className="DoorInput--remove" onClick={handleRemove}>
                 <img src={remove} alt="remove"></img>
             </div>
-            <Row>
-                <SelectInput
-                    label="Wall"
-                    options={wallOptions}
-                    value={props.params.wall}
-                    onChange={handleWallChange}
-                ></SelectInput>
-                <NumberInput
-                    label="Position"
-                    unit="m"
-                    min={0.1}
-                    max={2}
-                    step={0.1}
-                    value={props.params.position}
-                    onChange={handlePositionChange}
-                ></NumberInput>
-            </Row>
+            <SelectInput
+                label="Wall"
+                options={wallOptions}
+                value={props.params.wall}
+                onChange={handleWallChange}
+            ></SelectInput>
+            <SliderInput
+                label="Position"
+                unit="m"
+                min={0.1}
+                max={2}
+                step={0.1}
+                value={props.params.position} 
+                onChange={handlePositionChange}
+            ></SliderInput>
             <MaterialInput
                 onChange={handleMaterialChange}
                 typeValue={props.params.materialType}

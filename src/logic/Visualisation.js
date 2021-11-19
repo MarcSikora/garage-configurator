@@ -1,6 +1,7 @@
 import * as THREE from 'three'
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import metal from '../imgs/visualization/metal.png'
-import lightWood from '../imgs/visualization/lightWood.png'
+import brightWood from '../imgs/visualization/brightWood.png'
 import darkWood from '../imgs/visualization/darkWood.png'
 
 class Visualisation
@@ -11,9 +12,11 @@ class Visualisation
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
 		this.scene = null;
 		this.camera = null;
+		this.controls = null;
 		this.garage = null;
 
 		this.display = null;
+		this.texture = null;
 	}
 
 	init(display, params)
@@ -41,6 +44,7 @@ class Visualisation
 
 	animate()
 	{
+		this.controls.update();
 		window.requestAnimationFrame(() => this.animate());
 		this.renderer.render(this.scene, this.camera);
 	}
@@ -52,20 +56,31 @@ class Visualisation
 
 		let containerStyle = getComputedStyle(this.display);
 		this.camera = new THREE.PerspectiveCamera(75, parseInt(containerStyle.width) / parseInt(containerStyle.height), 1, 10000);
-		this.camera.position.set(300, 150, 350)
-		this.camera.lookAt(new THREE.Vector3(0, 50, 0));
+		this.camera.position.set(150, 200, 300);
 
 		this.renderer.setSize(parseInt(containerStyle.width), parseInt(containerStyle.height));
 		this.display.appendChild(this.renderer.domElement);
+		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+		this.controls.target.set(0, 75, 0)
+
 		this.resize();
+
+		this.prepareTextures();
+	}
+
+	prepareTextures()
+	{
+		this.textures = {
+			metal: new THREE.TextureLoader().load(metal),
+			brightWood: new THREE.TextureLoader().load(brightWood),
+			darkWood: new THREE.TextureLoader().load(darkWood)
+		};
 	}
 
 	createWalls()
 	{
-		let texture = this.loadTexture(this.settings.garage.materialType, this.settings.garage.material);
-		texture.wrapS = THREE.RepeatWrapping;
-		texture.wrapT = THREE.RepeatWrapping;
-		texture.repeat.set(3, 1);
+		let texture = this.getTexture(this.settings.garage.materialType, this.settings.garage.material);
+
 		let material = new THREE.MeshBasicMaterial({ color: this.getMaterialColor(this.settings.garage.materialType, this.settings.garage.material), map: texture, side: THREE.DoubleSide });
 
 		let geometry = this.getGarageGeometry();
@@ -85,10 +100,8 @@ class Visualisation
 		let geometry;
 		let roofMargin = 15;
 
-		let texture = this.loadTexture(this.settings.roof.materialType, this.settings.roof.material);
-		texture.wrapS = THREE.RepeatWrapping;
-		texture.wrapT = THREE.RepeatWrapping;
-		texture.repeat.set(3, 1)
+		let texture = this.getTexture(this.settings.roof.materialType, this.settings.roof.material);
+		texture.repeat.set(this.settings.garage.length, 1);	
 
 		switch (this.settings.roof.type)
 		{
@@ -137,22 +150,24 @@ class Visualisation
 		}
 		else
 		{
-			let scale = 2;
-
 			for (let i = 0; i < geometry.faces.length; i++)
 			{
+				let scale = this.settings.garage.length * 1.5;
+
 				if (i % 2 !== 0)
 					geometry.faceVertexUvs[0][i] = [
-						new THREE.Vector2(scale, 0),
 						new THREE.Vector2(0, 0),
-						new THREE.Vector2(0, scale)
+						new THREE.Vector2(0, scale),
+						new THREE.Vector2(scale, scale),
+
 					];
 				else
-					geometry.faceVertexUvs[0].push([
-						new THREE.Vector2(0, scale),
+					geometry.faceVertexUvs[0][i] = [
 						new THREE.Vector2(0, 0),
-						new THREE.Vector2(scale, 0)
-					]);
+						new THREE.Vector2(scale, 0),
+						new THREE.Vector2(scale, scale),
+
+					];
 			}
 		}
 
@@ -165,25 +180,33 @@ class Visualisation
 		return roof;
 	}
 
-	createGate(index)
+	createGate()
 	{
 		let thickness = 2;
 		let geometry = new THREE.BoxGeometry(this.settings.gate.width * 100 - thickness * 2, this.settings.gate.height * 100 - thickness * 2, 5);
 
-		let scale = 2;
-		geometry.faces.forEach(f =>
-		{
-			geometry.faceVertexUvs[0].push([
-				new THREE.Vector2(0, 0),
-				new THREE.Vector2(scale, 0),
-				new THREE.Vector2(0, scale)
-			]);
-		});
+		let scale = this.settings.gate.width;
 
-		let texture = this.loadTexture(this.settings.gate.materialType, this.settings.gate.material);
-		texture.wrapS = THREE.RepeatWrapping;
-		texture.wrapT = THREE.RepeatWrapping;
-		texture.repeat.set(3, 1);
+		for(let i = 0; i < geometry.faces.length; i++)
+		{
+			if(i % 2 === 0)
+				geometry.faceVertexUvs[0][i] =[
+					new THREE.Vector2(0, 0),
+					new THREE.Vector2(scale, 0),
+					new THREE.Vector2(0, scale),
+				];
+			else
+				geometry.faceVertexUvs[0][i] =[
+					new THREE.Vector2(scale, 0),
+					new THREE.Vector2(scale, scale),
+					new THREE.Vector2(0, scale),
+
+				];
+		};
+		
+
+		let texture = this.getTexture(this.settings.gate.materialType, this.settings.gate.material);
+		
 
 		let material = new THREE.MeshBasicMaterial({
 			color: this.getMaterialColor(this.settings.gate.materialType, this.settings.gate.material),
@@ -231,7 +254,7 @@ class Visualisation
 		gate.name = "gate";
 
 		let metal = new THREE.Mesh(geometry, material);
-		metal.name = "gateMetal" + index;
+		metal.name = "gateMetal";
 		gate.add(border);
 		gate.add(metal);
 		gate.add(handle);
@@ -255,20 +278,27 @@ class Visualisation
 
 		let geometry = new THREE.BoxGeometry(doorWidth - thickness * 2, doorHeight - thickness, 5);
 
-		let scale = 2;
-		geometry.faces.forEach(f =>
-		{
-			geometry.faceVertexUvs[0].push([
-				new THREE.Vector2(0, 0),
-				new THREE.Vector2(scale, 0),
-				new THREE.Vector2(0, scale)
-			]);
-		});
+		let scale = doorWidth*0.01;
+		let scale2 = scale*2;
 
-		let texture = this.loadTexture(d.materialType, d.material);
-		texture.wrapS = THREE.RepeatWrapping;
-		texture.wrapT = THREE.RepeatWrapping;
-		texture.repeat.set(3, 1);
+		for(let i = 0; i < geometry.faces.length; i++)
+		{
+			if(i % 2 === 0)
+				geometry.faceVertexUvs[0][i] = [
+					new THREE.Vector2(0, 0),
+					new THREE.Vector2(scale2, 0),
+					new THREE.Vector2(0, scale)
+			];
+			else
+				geometry.faceVertexUvs[0][i] =[
+					new THREE.Vector2(scale2, 0),
+					new THREE.Vector2(scale2, scale),
+					new THREE.Vector2(0, scale),
+				];
+		}
+
+		let texture = this.getTexture(d.materialType, d.material);
+		
 
 		let material = new THREE.MeshBasicMaterial({
 			color: this.getMaterialColor(d.materialType, d.material),
@@ -367,14 +397,14 @@ class Visualisation
 		let geometry = new THREE.BoxGeometry(wndWidth - thickness * 2, wndHeight - thickness, 5);
 
 		let scale = 2;
-		geometry.faces.forEach(f =>
+		for(let i = 0; i < geometry.faces.length; i++)
 		{
-			geometry.faceVertexUvs[0].push([
+			geometry.faceVertexUvs[0][i] =[
 				new THREE.Vector2(0, 0),
 				new THREE.Vector2(scale, 0),
 				new THREE.Vector2(0, scale)
-			]);
-		});
+			];
+		};
 
 		let material = new THREE.MeshBasicMaterial({
 			color: 0xd8fbf2,
@@ -471,20 +501,22 @@ class Visualisation
 		this.generateGarage();
 	}
 
-	loadTexture(type, nr)
+	getTexture(type, nr)
 	{
 		let texture;
 
 		if (type === 3)
 		{
 			if (nr === 1)
-				texture = new THREE.TextureLoader().load(lightWood);
+				texture = this.textures.brightWood;
 			else
-				texture = new THREE.TextureLoader().load(darkWood);
+				texture = this.textures.darkWood;
 		}
 		else
-			texture = new THREE.TextureLoader().load(metal);
+			texture = this.textures.metal;
 
+		texture.wrapS = THREE.RepeatWrapping;
+		texture.wrapT = THREE.RepeatWrapping;
 		return texture;
 	}
 
@@ -584,57 +616,66 @@ class Visualisation
 			);
 		}
 
-		let scale = 2;
 
 		if (geometry.faces.length === 8)
 		{
-			geometry.faces.forEach((f, i) =>
+			for(let i = 0; i < geometry.faces.length; i++)
 			{
+				let scale = ([0, 1, 4, 5].includes(i)) ? this.settings.garage.width : this.settings.garage.length;
+
 				if (i % 2 === 0)
-					geometry.faceVertexUvs[0].push([
-						new THREE.Vector2(0, 0),
+					geometry.faceVertexUvs[0][i] =[
 						new THREE.Vector2(scale, 0),
-						new THREE.Vector2(0, scale)
-					]);
+						new THREE.Vector2(0, scale),
+						new THREE.Vector2(0, 0),
+
+					];
 				else
-					geometry.faceVertexUvs[0].push([
-						new THREE.Vector2(scale, scale),
+					geometry.faceVertexUvs[0][i] =[
 						new THREE.Vector2(0, scale),
 						new THREE.Vector2(scale, 0),
-					]);
-			});
+						new THREE.Vector2(scale, scale)
+					];
+			};
 		}
 		else
 		{
 			for (let i = 0; i < 8; i++)
 			{
+				let scale = this.settings.garage.width;
+
 				if (i % 2 === 0)
-					geometry.faceVertexUvs[0].push([
-						new THREE.Vector2(0, 0),
+					geometry.faceVertexUvs[0][i] = [
 						new THREE.Vector2(scale, 0),
-						new THREE.Vector2(0, scale)
-					]);
+						new THREE.Vector2(0, scale),
+						new THREE.Vector2(0, 0),
+
+					];
 				else
-					geometry.faceVertexUvs[0].push([
-						new THREE.Vector2(scale, scale),
+					geometry.faceVertexUvs[0][i] = [
 						new THREE.Vector2(0, scale),
 						new THREE.Vector2(scale, 0),
-					]);
+						new THREE.Vector2(scale, scale),
+					];
 			}
 
-			for (let i = 0; i < 2; i++)
+			for (let i = 8; i < 10; i++)
 			{
-				geometry.faceVertexUvs[0].push([
-					new THREE.Vector2(scale / 2, scale),
-					new THREE.Vector2(scale, 0),
+				let scale = 2;
+
+				geometry.faceVertexUvs[0][i] = [
+
+					new THREE.Vector2(scale, scale/2),
+					new THREE.Vector2(0, scale),
 					new THREE.Vector2(0, 0),
-				]);
+
+				];
 			}
 
 		}
 
-		geometry.computeFaceNormals();
-		geometry.computeVertexNormals();
+		// geometry.computeFaceNormals();
+		// geometry.computeVertexNormals();
 		geometry.computeBoundingSphere();
 
 		return geometry;
@@ -704,7 +745,7 @@ class Visualisation
 
 		geometry.faces.push(
 			new THREE.Face3(0, 1, 4),
-			new THREE.Face3(0, 4, 3),
+			new THREE.Face3(0, 3, 4),
 			new THREE.Face3(1, 2, 5),
 			new THREE.Face3(1, 4, 5),
 
@@ -725,7 +766,7 @@ class Visualisation
 			new THREE.Face3(3, 6, 9),
 
 			new THREE.Face3(6, 7, 10),
-			new THREE.Face3(6, 10, 9),
+			new THREE.Face3(6, 9, 10),
 			new THREE.Face3(7, 8, 11),
 			new THREE.Face3(7, 10, 11),
 		);

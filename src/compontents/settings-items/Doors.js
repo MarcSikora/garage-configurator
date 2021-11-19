@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import uuid from 'react-uuid';
 import { useDispatch } from 'react-redux'
 import { addItem, changeItemProperty,removeItem } from '../../actions'
@@ -9,28 +9,58 @@ import DoorParameters from '../../logic/DoorParameters'
 
 function Doors(props) {
     const dispatch = useDispatch();
+    const [items, setItems] = useState([]);
+    const [previousLength, setPreviousLength] = useState(0);
+
+    useEffect(() => {
+        const handleItemChange = (index, propertyName, value) => {
+            dispatch(changeItemProperty("doors", index, propertyName, value));
+        }
+    
+        const handleItemRemove = (index) => {
+            dispatch(removeItem("doors", index));
+        }
+        
+        if(previousLength !== props.doors.length)
+        {
+            setItems(
+                props.doors.map((door, i) =>  
+                    <DoorInput
+                        key={uuid()}
+                        index={i}
+                        params={door}
+                        onItemChange={handleItemChange}
+                        onItemRemove={handleItemRemove}
+                    ></DoorInput>
+                )
+            );
+            console.log("re", previousLength, props.doors.length)
+        }
+        
+        setPreviousLength(props.doors.length);
+    }, [props.doors, dispatch]);
+
+    // const handleItemChange = (index, propertyName, value) => {
+    //     dispatch(changeItemProperty("doors", index, propertyName, value));
+    // }
+
+    // const handleItemRemove = (index) => {
+    //     dispatch(removeItem("doors", index));
+    // }
+    
+    // const items = props.doors.map((door, i) =>  
+    //     <DoorInput
+    //         key={uuid()}
+    //         index={i}
+    //         params={door}
+    //         onItemChange={handleItemChange}
+    //         onItemRemove={handleItemRemove}
+    //     ></DoorInput>
+    // )
 
     const handleAddItem = () => {
         dispatch(addItem("doors", new DoorParameters()))
     }
-
-    const handleItemChange = (index, propertyName, value) => {
-        dispatch(changeItemProperty("doors", index, propertyName, value));
-    }
-
-    const handleItemRemove = (index) => {
-        dispatch(removeItem("doors", index));
-    }
-
-    const items = props.doors.map((door, i) => {
-        return <DoorInput
-                    key={uuid()}
-                    index={i}
-                    params={door}
-                    onItemChange={handleItemChange}
-                    onItemRemove={handleItemRemove}
-                ></DoorInput>
-    });
 
     return (
         <div className="Doors">
