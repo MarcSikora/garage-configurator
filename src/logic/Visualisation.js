@@ -3,6 +3,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import metal from '../imgs/visualization/metal.png'
 import brightWood from '../imgs/visualization/brightWood.png'
 import darkWood from '../imgs/visualization/darkWood.png'
+import * as C from './Constants'
 
 class Visualisation
 {
@@ -52,16 +53,16 @@ class Visualisation
 	prepare()
 	{
 		this.scene = new THREE.Scene();
-		this.renderer.setClearColor(0xffffff, 1);
+		this.renderer.setClearColor(C.CANVAS_BACKGROUND, 1);
 
 		let containerStyle = getComputedStyle(this.display);
 		this.camera = new THREE.PerspectiveCamera(75, parseInt(containerStyle.width) / parseInt(containerStyle.height), 1, 10000);
-		this.camera.position.set(150, 200, 300);
+		this.camera.position.set(C.CAMERA_DEFAULT_POSITION.X, C.CAMERA_DEFAULT_POSITION.Y, C.CAMERA_DEFAULT_POSITION.Z);
 
 		this.renderer.setSize(parseInt(containerStyle.width), parseInt(containerStyle.height));
 		this.display.appendChild(this.renderer.domElement);
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-		this.controls.target.set(0, 75, 0)
+		this.controls.target.set(C.ORBIT_CONTROLS_TARGET.X, C.ORBIT_CONTROLS_TARGET.Y, C.ORBIT_CONTROLS_TARGET.Z);
 
 		this.resize();
 
@@ -80,57 +81,57 @@ class Visualisation
 	createWalls()
 	{
 		let texture = this.getTexture(this.settings.garage.materialType, this.settings.garage.material);
-
-		let material = new THREE.MeshBasicMaterial({ color: this.getMaterialColor(this.settings.garage.materialType, this.settings.garage.material), map: texture, side: THREE.DoubleSide });
-
+		let material = new THREE.MeshBasicMaterial({ 
+			color: this.getMaterialColor(this.settings.garage.materialType, this.settings.garage.material), 
+			map: texture, 
+			side: THREE.DoubleSide 
+		});
 		let geometry = this.getGarageGeometry();
 
 		let walls = new THREE.Mesh(geometry, material);
-		walls.name = "walls";
 		return walls;
 	}
 
 	createRoof()
 	{
-		let a = Math.abs(this.settings.garage.height_min * 100 - this.settings.garage.height_max * 100)
-		let b;
-
 		let roof = new THREE.Object3D();
-
-		let geometry;
-		let roofMargin = 15;
-
 		let texture = this.getTexture(this.settings.roof.materialType, this.settings.roof.material);
 		texture.repeat.set(this.settings.garage.length, 1);	
 
+		let a = Math.abs(this.settings.garage.height_min * 100 - this.settings.garage.height_max * 100)
+		let b = 0;
+		let roofMargin = C.ROOF_MARGIN;
+
+		let geometry;
+
 		switch (this.settings.roof.type)
 		{
-			case 0:
+			case C.ROOF_TYPES.LEFT:
 				b = this.settings.garage.width * 100;
 				roof.rotateZ(a / b);
 				texture.rotation = Math.PI / 2;
 				geometry = new THREE.BoxGeometry(this.hypotenuseLength(a, b) + roofMargin, 2, this.settings.garage.length * 100 + roofMargin);
 				break;
 
-			case 1:
+			case C.ROOF_TYPES.RIGHT:
 				b = this.settings.garage.width * 100;
 				roof.rotateZ(-a / b);
 				texture.rotation = Math.PI / 2;
 				geometry = new THREE.BoxGeometry(this.hypotenuseLength(a, b) + roofMargin, 2, this.settings.garage.length * 100 + roofMargin);
 				break;
 
-			case 2:
+			case C.ROOF_TYPES.GABLE:
 				geometry = this.getGableGeometry();
 				roof.position.set(0, this.settings.garage.height_min * 100, 0);
 				break;
 
-			case 3:
+			case C.ROOF_TYPES.FRONT:
 				b = this.settings.garage.length * 100;
 				roof.rotateX(a / b);
 				geometry = new THREE.BoxGeometry(this.settings.garage.width * 100 + roofMargin, 2, this.hypotenuseLength(a, b) + roofMargin);
 				break;
 
-			case 4:
+			case C.ROOF_TYPES.BACK:
 				b = this.settings.garage.length * 100;
 				roof.rotateX(-a / b);
 				geometry = new THREE.BoxGeometry(this.settings.garage.width * 100 + roofMargin, 2, this.hypotenuseLength(a, b) + roofMargin);
@@ -140,11 +141,13 @@ class Visualisation
 		}
 
 		let material = new THREE.MeshBasicMaterial({
-			color: this.getMaterialColor(this.settings.roof.materialType, this.settings.roof.material), map: texture, side: THREE.DoubleSide
+			color: this.getMaterialColor(this.settings.roof.materialType, this.settings.roof.material), 
+			map: texture, 
+			side: THREE.DoubleSide
 		});
 
 
-		if (this.settings.roof.type !== 2)
+		if (this.settings.roof.type !== C.ROOF_TYPES.GABLE)
 		{
 			roof.position.set(0, (this.settings.garage.height_max * 100 + this.settings.garage.height_min * 100) / 2, 0);
 		}
@@ -171,10 +174,7 @@ class Visualisation
 			}
 		}
 
-		geometry.computeBoundingSphere();
-
 		let metal = new THREE.Mesh(geometry, material);
-		metal.name = "roofMetal";
 		roof.add(metal);
 
 		return roof;
@@ -182,8 +182,7 @@ class Visualisation
 
 	createGate()
 	{
-		let thickness = 2;
-		let geometry = new THREE.BoxGeometry(this.settings.gate.width * 100 - thickness * 2, this.settings.gate.height * 100 - thickness * 2, 5);
+		let geometry = new THREE.BoxGeometry(this.settings.gate.width * 100 - C.THICKNESS * 2, this.settings.gate.height * 100 - C.THICKNESS * 2, 5);
 
 		let scale = this.settings.gate.width;
 
@@ -207,16 +206,15 @@ class Visualisation
 
 		let texture = this.getTexture(this.settings.gate.materialType, this.settings.gate.material);
 		
-
 		let material = new THREE.MeshBasicMaterial({
 			color: this.getMaterialColor(this.settings.gate.materialType, this.settings.gate.material),
 			map: texture, side: THREE.DoubleSide
 		});
 
-		let sides = new THREE.BoxGeometry(thickness, this.settings.gate.height * 100 - thickness, thickness);
-		let tops = new THREE.BoxGeometry(this.settings.gate.width * 100 - thickness, thickness, thickness);
+		let sides = new THREE.BoxGeometry(C.THICKNESS, this.settings.gate.height * 100 - C.THICKNESS, C.THICKNESS);
+		let tops = new THREE.BoxGeometry(this.settings.gate.width * 100 - C.THICKNESS, C.THICKNESS, C.THICKNESS);
 		let borderMaterial = new THREE.MeshBasicMaterial({
-			color: 0x111111,
+			color: C.BORDER_COLOR,
 			side: THREE.DoubleSide
 		});
 
@@ -225,36 +223,33 @@ class Visualisation
 		let right = new THREE.Mesh(sides, borderMaterial);
 		let top = new THREE.Mesh(tops, borderMaterial);
 		let bottom = new THREE.Mesh(tops, borderMaterial);
-		left.position.set(-this.settings.gate.width * 100 / 2 + thickness, 0, thickness / 2);
-		right.position.set(this.settings.gate.width * 100 / 2 - thickness, 0, thickness / 2);
-		top.position.set(0, this.settings.gate.height * 100 / 2 - thickness, thickness / 2);
-		bottom.position.set(0, -this.settings.gate.height * 100 / 2 + thickness, thickness / 2);
+
+		left.position.set(-this.settings.gate.width * 100 / 2 + C.THICKNESS, 0, C.THICKNESS / 2);
+		right.position.set(this.settings.gate.width * 100 / 2 - C.THICKNESS, 0, C.THICKNESS / 2);
+		top.position.set(0, this.settings.gate.height * 100 / 2 - C.THICKNESS, C.THICKNESS / 2);
+		bottom.position.set(0, -this.settings.gate.height * 100 / 2 + C.THICKNESS, C.THICKNESS / 2);
+		
 		border.add(left);
 		border.add(right);
 		border.add(top);
 		border.add(bottom);
 
-		let handleGeo = new THREE.BoxGeometry(15, thickness, thickness);
+		let handleGeo = new THREE.BoxGeometry(15, C.THICKNESS, C.THICKNESS);
 		let handle = new THREE.Mesh(handleGeo, borderMaterial);
 
-		if (this.settings.gate.type === 0)
+		if (this.settings.gate.type === C.GATE_TYPES.DOUBLE_LEAF)
 		{
 			handle.rotateZ(Math.PI / 2);
-			handle.position.set(thickness + 5, 0, thickness);
+			handle.position.set(C.THICKNESS + 5, 0, C.THICKNESS);
 			let center = new THREE.Mesh(sides, borderMaterial);
 			center.position.set(0, 0, 2);
 			border.add(center);
 		}
 		else
-			handle.position.set(0, -this.settings.gate.height * 100 / 2 + 15, thickness);
-
-		geometry.computeBoundingSphere();
+			handle.position.set(0, -this.settings.gate.height * 100 / 2 + 15, C.THICKNESS);
 
 		let gate = new THREE.Object3D();
-		gate.name = "gate";
-
 		let metal = new THREE.Mesh(geometry, material);
-		metal.name = "gateMetal";
 		gate.add(border);
 		gate.add(metal);
 		gate.add(handle);
@@ -272,11 +267,10 @@ class Visualisation
 
 	createDoor(d, index)
 	{
-		let thickness = 2;
-		let doorWidth = 80;
-		let doorHeight = 190;
+		let doorWidth = C.DOOR_WIDTH * 100;
+		let doorHeight = C.DOOR_HEIGHT * 100;
 
-		let geometry = new THREE.BoxGeometry(doorWidth - thickness * 2, doorHeight - thickness, 5);
+		let geometry = new THREE.BoxGeometry(doorWidth - C.THICKNESS * 2, doorHeight - C.THICKNESS, 5);
 
 		let scale = doorWidth*0.01;
 		let scale2 = scale*2;
@@ -302,13 +296,14 @@ class Visualisation
 
 		let material = new THREE.MeshBasicMaterial({
 			color: this.getMaterialColor(d.materialType, d.material),
-			map: texture, side: THREE.DoubleSide
+			map: texture, 
+			side: THREE.DoubleSide
 		});
 
-		let sides = new THREE.BoxGeometry(thickness, doorHeight - thickness, thickness);
-		let tops = new THREE.BoxGeometry(doorWidth - thickness, thickness, thickness);
+		let sides = new THREE.BoxGeometry(C.THICKNESS, doorHeight - C.THICKNESS, C.THICKNESS);
+		let tops = new THREE.BoxGeometry(doorWidth - C.THICKNESS, C.THICKNESS, C.THICKNESS);
 		let borderMaterial = new THREE.MeshBasicMaterial({
-			color: 0x111111,
+			color: C.BORDER_COLOR,
 			side: THREE.DoubleSide
 		});
 
@@ -318,30 +313,27 @@ class Visualisation
 		let top = new THREE.Mesh(tops, borderMaterial);
 		let bottom = new THREE.Mesh(tops, borderMaterial);
 
-		left.position.set(-doorWidth / 2 + thickness, 0, thickness / 2);
-		right.position.set(doorWidth / 2 - thickness, 0, thickness / 2);
-		top.position.set(0, doorHeight / 2 - thickness / 2, thickness / 2);
-		bottom.position.set(0, -doorHeight / 2 + thickness / 2, thickness / 2);
+		left.position.set(-doorWidth / 2 + C.THICKNESS, 0, C.THICKNESS / 2);
+		right.position.set(doorWidth / 2 - C.THICKNESS, 0, C.THICKNESS / 2);
+		top.position.set(0, doorHeight / 2 - C.THICKNESS / 2, C.THICKNESS / 2);
+		bottom.position.set(0, -doorHeight / 2 + C.THICKNESS / 2, C.THICKNESS / 2);
 
 		border.add(left);
 		border.add(right);
 		border.add(top);
 		border.add(bottom);
 
-		let handleGeo = new THREE.BoxGeometry(15, thickness, thickness);
+		let handleGeo = new THREE.BoxGeometry(15, C.THICKNESS, C.THICKNESS);
 		let handle = new THREE.Mesh(handleGeo, borderMaterial);
 
 		if (d.handlePosition === 1)
-			handle.position.set(doorWidth / 2 - 15, 0, thickness);
+			handle.position.set(doorWidth / 2 - 15, 0, C.THICKNESS);
 		else
-			handle.position.set(-doorWidth / 2 + 15, 0, thickness);
+			handle.position.set(-doorWidth / 2 + 15, 0, C.THICKNESS);
 
-		geometry.computeBoundingSphere();
 
 		let door = new THREE.Object3D();
-
 		let metal = new THREE.Mesh(geometry, material);
-		metal.name = "doorMetal" + index;
 
 		door.add(border);
 		door.add(metal);
@@ -349,21 +341,21 @@ class Visualisation
 
 		switch (d.wall)
 		{
-			case 0:
+			case C.WALLS.LEFT:
 				door.rotateY(-Math.PI / 2);
 				door.position.set(-this.settings.garage.width * 100 / 2, doorHeight / 2, d.position * 100 - this.settings.garage.length * 100 / 2 + doorWidth / 2);
 				break;
 
-			case 1:
+			case C.WALLS.RIGHT:
 				door.rotateY(Math.PI / 2);
 				door.position.set(this.settings.garage.width * 100 / 2, doorHeight / 2, d.position * 100 - this.settings.garage.length * 100 / 2 + doorWidth / 2);
 				break;
 
-			case 2:
+			case C.WALLS.FRONT:
 				door.position.set(d.position * 100 - this.settings.garage.width * 100 / 2 + doorWidth / 2, doorHeight / 2, this.settings.garage.length * 100 / 2);
 				break;
 
-			case 3:
+			case C.WALLS.BACK:
 				door.rotateY(Math.PI);
 				door.position.set(d.position * 100 - this.settings.garage.width * 100 / 2 + doorWidth / 2, doorHeight / 2, -this.settings.garage.length * 100 / 2);
 				break;
@@ -376,27 +368,12 @@ class Visualisation
 
 	createWindow(w)
 	{
-		let types = [
-			{
-				width: 60,
-				height: 40,
-			},
-			{
-				width: 80,
-				height: 50,
-			},
-			{
-				width: 100,
-				height: 50,
-			}
-		]
-		let thickness = 2;
-		let wndWidth = types[w.type].width;
-		let wndHeight = types[w.type].height;
+		let wndWidth = C.WINDOW_SIZES[w.type].WIDTH;
+		let wndHeight = C.WINDOW_SIZES[w.type].HEIGHT;
 
-		let geometry = new THREE.BoxGeometry(wndWidth - thickness * 2, wndHeight - thickness, 5);
-
+		let geometry = new THREE.BoxGeometry(wndWidth - C.THICKNESS * 2, wndHeight - C.THICKNESS, 5);
 		let scale = 2;
+
 		for(let i = 0; i < geometry.faces.length; i++)
 		{
 			geometry.faceVertexUvs[0][i] =[
@@ -407,14 +384,14 @@ class Visualisation
 		};
 
 		let material = new THREE.MeshBasicMaterial({
-			color: 0xd8fbf2,
+			color: C.WINDOW_COLOR,
 			side: THREE.DoubleSide
 		});
 
-		let sides = new THREE.BoxGeometry(thickness, wndHeight - thickness, thickness);
-		let tops = new THREE.BoxGeometry(wndWidth - thickness, thickness, thickness);
+		let sides = new THREE.BoxGeometry(C.THICKNESS, wndHeight - C.THICKNESS, C.THICKNESS);
+		let tops = new THREE.BoxGeometry(wndWidth - C.THICKNESS, C.THICKNESS, C.THICKNESS);
 		let borderMaterial = new THREE.MeshBasicMaterial({
-			color: 0x111111,
+			color: C.BORDER_COLOR,
 			side: THREE.DoubleSide
 		});
 
@@ -424,17 +401,15 @@ class Visualisation
 		let top = new THREE.Mesh(tops, borderMaterial);
 		let bottom = new THREE.Mesh(tops, borderMaterial);
 
-		left.position.set(-wndWidth / 2 + thickness, 0, thickness / 2);
-		right.position.set(wndWidth / 2 - thickness, 0, thickness / 2);
-		top.position.set(0, wndHeight / 2 - thickness / 2, thickness / 2);
-		bottom.position.set(0, -wndHeight / 2 + thickness / 2, thickness / 2);
+		left.position.set(-wndWidth / 2 + C.THICKNESS, 0, C.THICKNESS / 2);
+		right.position.set(wndWidth / 2 - C.THICKNESS, 0, C.THICKNESS / 2);
+		top.position.set(0, wndHeight / 2 - C.THICKNESS / 2, C.THICKNESS / 2);
+		bottom.position.set(0, -wndHeight / 2 + C.THICKNESS / 2, C.THICKNESS / 2);
 
 		border.add(left);
 		border.add(right);
 		border.add(top);
 		border.add(bottom);
-
-		geometry.computeBoundingSphere();
 
 		let wnd = new THREE.Object3D();
 		let glass = new THREE.Mesh(geometry, material);
@@ -445,21 +420,21 @@ class Visualisation
 
 		switch (w.wall)
 		{
-			case 0:
+			case C.WALLS.LEFT:
 				wnd.rotateY(-Math.PI / 2);
 				wnd.position.set(-this.settings.garage.width * 100 / 2, Y, w.positionX * 100 - this.settings.garage.length * 100 / 2 + wndWidth / 2);
 				break;
 
-			case 1:
+			case C.WALLS.RIGHT:
 				wnd.rotateY(Math.PI / 2);
 				wnd.position.set(this.settings.garage.width * 100 / 2, Y, w.positionX * 100 - this.settings.garage.length * 100 / 2 + wndWidth / 2);
 				break;
 
-			case 2:
+			case C.WALLS.FRONT:
 				wnd.position.set(w.positionX * 100 - this.settings.garage.width * 100 / 2 + wndWidth / 2, Y, this.settings.garage.length * 100 / 2);
 				break;
 
-			case 3:
+			case C.WALLS.BACK:
 				wnd.rotateY(Math.PI);
 				wnd.position.set(w.positionX * 100 - this.settings.garage.width * 100 / 2 + wndWidth / 2, Y, -this.settings.garage.length * 100 / 2);
 				break;
@@ -473,18 +448,15 @@ class Visualisation
 	{
 
 		this.garage = new THREE.Object3D();
-		this.garage.name = "garage";
 
 		this.garage.add(this.createWalls());
 		this.garage.add(this.createRoof());
 
-		this.settings.doors.forEach((d, i) =>
-		{
+		this.settings.doors.forEach((d, i) => {
 			this.garage.add(this.createDoor(d, i));
 		})
 
-		this.settings.windows.forEach((w) =>
-		{
+		this.settings.windows.forEach((w) => {
 			this.garage.add(this.createWindow(w));
 		})
 
@@ -505,7 +477,7 @@ class Visualisation
 	{
 		let texture;
 
-		if (type === 3)
+		if (type === C.MATERIAL_TYPES.WOODLIKE)
 		{
 			if (nr === 1)
 				texture = this.textures.brightWood;
@@ -522,34 +494,10 @@ class Visualisation
 
 	getMaterialColor(type, nr)
 	{
-		let codes = [
-			[
-				0xa1a1a1
-			],
-			[
-				0x571820, 0x6c332a,
-				0x792322, 0x485946,
-				0x45484d, 0x8d4932,
-				0x442f2a, 0x4d4342,
-				0x111111
-			],
-			[
-				0xd1a96c, 0x571820, 0x6c332a, 0x792322, 0x074e7a,
-				0x124232, 0x485946, 0x186e3d, 0x383d41, 0x45484d,
-				0xc3c5c2, 0x8d4932, 0x442f2a, 0x4d4342, 0xe1e2dd,
-				0xa1a1a1, 0xfefefe
-			],
-			[
-				0xffffff,
-				0xffffff,
-			]
-		]
-
-		if (type === 0)
+		if (type === C.MATERIAL_TYPES.GALVANIZED)
 			nr = 0;
 
-
-		return codes[type][nr];
+		return C.COLORS[type][nr];
 	}
 
 	getGarageGeometry()
@@ -674,10 +622,6 @@ class Visualisation
 
 		}
 
-		// geometry.computeFaceNormals();
-		// geometry.computeVertexNormals();
-		geometry.computeBoundingSphere();
-
 		return geometry;
 	}
 
@@ -720,7 +664,6 @@ class Visualisation
 		const Y = this.settings.garage.height_max * 100 - this.settings.garage.height_min * 100;
 		const Z = this.settings.garage.length * 100 / 2;
 
-		// let topVerts = this.getTopVertices();
 		let m = 15;
 
 		let k = 30 / (X * 2);
