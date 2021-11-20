@@ -5,6 +5,7 @@ import Heights from './settings-items/Heights'
 import Roof from './settings-items/Roof'
 import Walls from './settings-items/Walls'
 import Doors from './settings-items/Doors'
+import Windows from './settings-items/Windows'
 import './Settings.css'
 
 function Settings(props) {
@@ -16,6 +17,7 @@ function Settings(props) {
             <Walls></Walls>
             <Gate></Gate>
             <Doors doors={props.parameters.doors}></Doors>
+            <Windows windows={props.parameters.windows}></Windows>
         </div>
     )
 }
