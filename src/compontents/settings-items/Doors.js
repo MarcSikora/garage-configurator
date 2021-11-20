@@ -34,29 +34,10 @@ function Doors(props) {
                     ></DoorInput>
                 )
             );
-            console.log("re", previousLength, props.doors.length)
         }
         
         setPreviousLength(props.doors.length);
-    }, [props.doors, dispatch]);
-
-    // const handleItemChange = (index, propertyName, value) => {
-    //     dispatch(changeItemProperty("doors", index, propertyName, value));
-    // }
-
-    // const handleItemRemove = (index) => {
-    //     dispatch(removeItem("doors", index));
-    // }
-    
-    // const items = props.doors.map((door, i) =>  
-    //     <DoorInput
-    //         key={uuid()}
-    //         index={i}
-    //         params={door}
-    //         onItemChange={handleItemChange}
-    //         onItemRemove={handleItemRemove}
-    //     ></DoorInput>
-    // )
+    }, [props.doors, previousLength, dispatch]);
 
     const handleAddItem = () => {
         dispatch(addItem("doors", new DoorParameters()))

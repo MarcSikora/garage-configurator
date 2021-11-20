@@ -9,7 +9,7 @@ function SettingsItem(props) {
         setIsContentVisible(!isContentVisible);
     }
 
-    const content = (isContentVisible) ? <div className="SettingsItem--content">{props.children}</div> : null;
+    const displayValue = (isContentVisible) ?  "block": "none";
 
     return (
         <div className="SettingsItem">
@@ -22,7 +22,10 @@ function SettingsItem(props) {
                     onClick={handleDropdown}
                 ></img>
             </div>   
-            {content}
+            <div 
+                className="SettingsItem--content"
+                style={{display: displayValue}}
+            >{props.children}</div>
         </div>
     )
 }

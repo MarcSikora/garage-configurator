@@ -5,8 +5,8 @@ import ImageListInput from './ImageListInput'
 import {WallTypes} from '../../logic/WallTypes';
 
 function MaterialInput(props) {
-    const [type, setType] = useState(props.typeValue | 0);
-    const [color, setColor] = useState(props.colorValueValue | 0);
+    const [type, setType] = useState(props.typeValue || 0);
+    const [color, setColor] = useState(props.colorValueValue || 0);
 
     const getTypes = () => {
         const names = ["Galvanized", "Mat", "Shiny", "Woodlike"];

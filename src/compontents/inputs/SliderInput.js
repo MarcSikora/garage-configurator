@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './SliderInput.css'
 
 function SliderInput(props) {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(props.value || 0);
 
     const handleChange = (e) => {
         const v = parseFloat(e.currentTarget.value);
@@ -19,6 +19,7 @@ function SliderInput(props) {
                 max={props.max}
                 step={props.step}
                 onChange={handleChange}
+                value={value}
             ></input>
             <div className="SliderInput--value">{value} {props.unit}</div>
         </div>
