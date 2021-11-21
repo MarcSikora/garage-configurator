@@ -27,3 +27,15 @@
         width: 90%;
     }
 }
+
+@media only screen and (max-width:900px) {
+    .Display {
+        border-bottom: 1px solid lightgray;
+        padding-bottom: 10px;
+    }
+
+    .Display--container {
+        height: 300px;
+        margin: 10px;
+    }
+}

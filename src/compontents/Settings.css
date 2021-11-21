@@ -3,3 +3,10 @@
     width: 650px;
     overflow-y: scroll;
 }
+
+@media only screen and (max-width:900px) {
+    .Settings {
+        width: 100%;
+        overflow-y: auto;
+    }
+}
