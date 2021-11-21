@@ -33,6 +33,12 @@ class WarningSystem
         if(this.checkWindowWindowOverlap(params))
             warnings.push(C.WARNINGS.WINDOW_WINDOW_OVERLAP);
 
+        if(this.checkDoorOutside(params))
+            warnings.push(C.WARNINGS.DOOR_OUTSIDE);
+
+        if(this.checkWindowOutside(params))
+            warnings.push(C.WARNINGS.WINDOW_OUTSIDE);
+
         return warnings;
     }
 
@@ -134,6 +140,29 @@ class WarningSystem
                     C.WINDOW_SIZES[w.type].WIDTH * 0.01, 
                     C.WINDOW_SIZES[w.type].HEIGHT * 0.01
                 ));
+        })
+    }
+
+    checkDoorOutside(params)
+    {
+        return params.doors.some(door => {
+            let side = [C.WALLS.LEFT, C.WALLS.RIGHT].includes(door.wall) ? 
+                params.garage.length : params.garage.width;
+            
+            let maxDoorPosition = parseFloat((side - C.DOOR_WIDTH - C.SPACE).toFixed(1));
+            return (maxDoorPosition < door.position)
+        })
+    }
+
+    checkWindowOutside(params)
+    {
+        return params.windows.some(window => {
+            let side = [C.WALLS.LEFT, C.WALLS.RIGHT].includes(window.wall) ? 
+                params.garage.length : params.garage.width;
+            
+            let maxWindowPositionX = parseFloat((side - C.WINDOW_SIZES[window.type].WIDTH*0.01 - C.SPACE).toFixed(1));
+            let maxWindowPositionY = parseFloat((params.garage.height_min - C.WINDOW_SIZES[window.type].HEIGHT*0.01 - C.SPACE).toFixed(1));
+            return (maxWindowPositionX < window.positionX || maxWindowPositionY < window.positionY)
         })
     }
 }

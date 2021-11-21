@@ -85,5 +85,7 @@ export const WARNINGS = {
     DOOR_WINDOW_OVERLAP: "Door is overlapping with window",
     DOOR_DOOR_OVERLAP: "Doors are overlapping",
     WINDOW_GATE_OVERLAP: "Window is overlapping with gate",
-    WINDOW_WINDOW_OVERLAP: "Windows are overlapping"
+    WINDOW_WINDOW_OVERLAP: "Windows are overlapping",
+    DOOR_OUTSIDE: "Door is outside garage",
+    WINDOW_OUTSIDE: "Windows is outside garage or too close to roof",
 }

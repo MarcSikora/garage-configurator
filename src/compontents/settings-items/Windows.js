@@ -10,9 +10,12 @@ import WindowInput from '../inputs/WindowInput';
 function Windows(props) {
     const dispatch = useDispatch();
     const [items, setItems] = useState([]);
-    const [previousLength, setPreviousLength] = useState(0);
-    const [previousGarageLength, setPreviousGarageLength] = useState(0);
-    const [previousGarageWidth, setPreviousGarageWidth] = useState(0);
+    const [previous, setPrevious] = useState({
+        windowsLength: 0,
+        walls: [],
+        garageLength: 0,
+        garageWidth: 0
+    });
 
     useEffect(() => {
         const handleItemChange = (index, propertyName, value) => {
@@ -25,10 +28,16 @@ function Windows(props) {
 
         const checkForChange = () => {
             return (
-                previousLength !== props.windows.length || 
-                previousGarageLength !== props.garage.length || 
-                previousGarageWidth !== props.garage.width
+                checkWalls() ||
+                previous.windowsLength !== props.windows.length || 
+                previous.garageLength !== props.garage.length || 
+                previous.garageWidth !== props.garage.width
             );
+        }
+
+        const checkWalls = () => {
+            const currentWalls = props.windows.map(window => window.wall);
+            return previous.walls.some((wall, i) => wall !== currentWalls[i]);
         }
         
         if(checkForChange())
@@ -38,18 +47,22 @@ function Windows(props) {
                     <WindowInput
                         key={uuid()}
                         index={i}
+                        garage={props.garage}
                         params={window}
                         onItemChange={handleItemChange}
                         onItemRemove={handleItemRemove}
                     ></WindowInput>
                 )
             );            
+
+            setPrevious({
+                windowsLength: props.windows.length,
+                walls: props.windows.map(window => window.wall),
+                garageLength: props.garage.length,
+                garageWidth: props.garage.width
+            });        
         }
-        
-        setPreviousLength(props.windows.length);
-        setPreviousGarageLength(props.garage.length);
-        setPreviousGarageWidth(props.garage.width);
-    }, [props.windows, props.garage, previousLength, previousGarageLength, previousGarageWidth, dispatch]);
+    }, [props.windows, props.garage, previous, dispatch]);
 
     const handleAddItem = () => {
         dispatch(addItem("windows", new WindowParameters()))
