@@ -11,6 +11,8 @@ function Windows(props) {
     const dispatch = useDispatch();
     const [items, setItems] = useState([]);
     const [previousLength, setPreviousLength] = useState(0);
+    const [previousGarageLength, setPreviousGarageLength] = useState(0);
+    const [previousGarageWidth, setPreviousGarageWidth] = useState(0);
 
     useEffect(() => {
         const handleItemChange = (index, propertyName, value) => {
@@ -20,24 +22,34 @@ function Windows(props) {
         const handleItemRemove = (index) => {
             dispatch(removeItem("windows", index));
         }
+
+        const checkForChange = () => {
+            return (
+                previousLength !== props.windows.length || 
+                previousGarageLength !== props.garage.length || 
+                previousGarageWidth !== props.garage.width
+            );
+        }
         
-        if(previousLength !== props.windows.length)
+        if(checkForChange())
         {
             setItems(
-                props.windows.map((door, i) =>  
+                props.windows.map((window, i) =>  
                     <WindowInput
                         key={uuid()}
                         index={i}
-                        params={door}
+                        params={window}
                         onItemChange={handleItemChange}
                         onItemRemove={handleItemRemove}
                     ></WindowInput>
                 )
-            );
+            );            
         }
         
         setPreviousLength(props.windows.length);
-    }, [props.windows, previousLength, dispatch]);
+        setPreviousGarageLength(props.garage.length);
+        setPreviousGarageWidth(props.garage.width);
+    }, [props.windows, props.garage, previousLength, previousGarageLength, previousGarageWidth, dispatch]);
 
     const handleAddItem = () => {
         dispatch(addItem("windows", new WindowParameters()))
@@ -47,7 +59,7 @@ function Windows(props) {
         <div className="Windows">
             <SettingsItem header="Windows">
                <ArrayInput
-                label="Winodws count:"
+                label="Windows count:"
                 items={items}
                 onAddItem={handleAddItem}
                ></ArrayInput>

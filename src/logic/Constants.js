@@ -75,4 +75,10 @@ export const COLORS = [
         0xffffff,
         0xffffff,
     ]
-]
+];
+export const WARNINGS = {
+    GATE_WIDTH: "Gate width is bigger than garage width",
+    GATE_HEIGHT: "Gate height is bigger than garage minimum height",
+    NO_ENTRY: "No entry. Add gate or door",
+    GARAGE_HEIGHT: "Minimum height is bigger than maximum height"
+}

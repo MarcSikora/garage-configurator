@@ -9,7 +9,7 @@ import Row from '../inputs/Row'
 import { GateTypes } from '../../logic/GateTypes'
 import { GatePositions } from '../../logic/GatePositions' 
 
-function Gate() {
+function Gate(props) {
     const dispatch = useDispatch();
 
     const handleTypeChange = (id) => {
@@ -54,7 +54,7 @@ function Gate() {
                         label="Width"
                         unit="m"
                         min={2}
-                        max={3}
+                        max={props.garage.width}
                         step={0.1}
                         value={2}
                         onChange={handleWidthChange}
@@ -63,7 +63,7 @@ function Gate() {
                         label="Height"
                         unit="m"
                         min={1.9}
-                        max={2.9}
+                        max={props.garage.height_min}
                         step={0.1}
                         value={1.9}
                         onChange={handleHeightChange}

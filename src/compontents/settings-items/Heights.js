@@ -4,7 +4,7 @@ import {changeProperty} from '../../actions'
 import SettingsItem from './SettingsItem'
 import NumberInput from '../inputs/NumberInput'
 
-function Heights() {
+function Heights(props) {
     const dispatch = useDispatch();
    
     const handleMinHeightChange = (value) => {
@@ -23,7 +23,7 @@ function Heights() {
                         label="Minimal"
                         unit="m"
                         min={2}
-                        max={3}
+                        max={props.garage.height_max}
                         step={0.1}
                         value={2.1}
                         onChange={handleMinHeightChange}
@@ -31,7 +31,7 @@ function Heights() {
                     <NumberInput 
                         label="Maximal"
                         unit="m"
-                        min={2.1}
+                        min={props.garage.height_min}
                         max={3.1}
                         step={0.1}
                         value={2.3}

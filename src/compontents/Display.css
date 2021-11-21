@@ -1,6 +1,7 @@
 .Display {
     flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -11,8 +12,18 @@
     height: 600px;
 }
 
+.Display--info {
+    width: 900px;
+    font-size: 10pt;
+    color: orange;
+}
+
 @media only screen and (max-width:1500px) {
     .Display--container {
+        width: 90%;
+    }
+
+    .Display--info {
         width: 90%;
     }
 }
