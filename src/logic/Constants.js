@@ -80,5 +80,10 @@ export const WARNINGS = {
     GATE_WIDTH: "Gate width is bigger than garage width",
     GATE_HEIGHT: "Gate height is bigger than garage minimum height",
     NO_ENTRY: "No entry. Add gate or door",
-    GARAGE_HEIGHT: "Minimum height is bigger than maximum height"
+    GARAGE_HEIGHT: "Minimum height is bigger than maximum height",
+    DOOR_GATE_OVERLAP: "Door is overlapping with gate",
+    DOOR_WINDOW_OVERLAP: "Door is overlapping with window",
+    DOOR_DOOR_OVERLAP: "Doors are overlapping",
+    WINDOW_GATE_OVERLAP: "Window is overlapping with gate",
+    WINDOW_WINDOW_OVERLAP: "Windows are overlapping"
 }

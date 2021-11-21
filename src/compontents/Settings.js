@@ -13,21 +13,11 @@ function Settings(props) {
         <div className="Settings">
             <Dimensions></Dimensions>
             <Roof></Roof>
-            <Heights 
-                garage={props.parameters.garage}
-            ></Heights>
+            <Heights garage={props.parameters.garage}></Heights>
             <Walls></Walls>
-            <Gate 
-                garage={props.parameters.garage}
-            ></Gate>
-            <Doors 
-                doors={props.parameters.doors}
-                garage={props.parameters.garage}
-            ></Doors>
-            <Windows 
-                windows={props.parameters.windows}
-                garage={props.parameters.garage}
-            ></Windows>
+            <Gate garage={props.parameters.garage}></Gate>
+            <Doors doors={props.parameters.doors} garage={props.parameters.garage}></Doors>
+            <Windows windows={props.parameters.windows} garage={props.parameters.garage}></Windows>
         </div>
     )
 }

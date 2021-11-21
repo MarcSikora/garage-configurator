@@ -18,7 +18,7 @@ function Display(props) {
     useEffect(() => {
         let ws = new WarningSystem();
         setInfoItems(ws.getWarnings(props.parameters).map(w => <div key={uuid()}>Warning: {w}</div>));
-
+            
         vis.current.update(props.parameters);
     }, [props.parameters]);
 

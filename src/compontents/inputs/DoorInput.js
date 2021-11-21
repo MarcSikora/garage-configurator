@@ -22,12 +22,6 @@ function DoorInput(props) {
     })
 
     const handleWallChange = (value) => {
-        const side = [WALLS.LEFT, WALLS.RIGHT].includes(value) ? 
-            props.garage.length : props.garage.width;
-
-        if(side < parseFloat((value + DOOR_WIDTH + SPACE).toFixed(1))) 
-            handlePositionChange(parseFloat((side - DOOR_WIDTH - SPACE).toFixed(1)));
-
         props.onItemChange(props.index, "wall", value);
     }
 

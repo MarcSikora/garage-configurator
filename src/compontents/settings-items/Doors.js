@@ -37,8 +37,7 @@ function Doors(props) {
 
         const checkWalls = () => {
             const currentWalls = props.doors.map(door => door.wall);
-            console.log(previous.walls)
-            return previous.walls.some((wall, i) => wall != currentWalls[i]);
+            return previous.walls.some((wall, i) => wall !== currentWalls[i]);
         }
 
         if(checkForChange())
@@ -55,9 +54,10 @@ function Doors(props) {
                     ></DoorInput>
                 )
             );    
+
             setPrevious({
                 doorsLength: props.doors.length,
-                wall: props.doors.map(door => door.wall),
+                walls: props.doors.map(door => door.wall),
                 garageLength: props.garage.length,
                 garageWidth: props.garage.width
             });        
