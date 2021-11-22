@@ -25,7 +25,60 @@ Display enables user to view garage from different perspectives. Use LMB to move
 
 ## Settings
 
+![dimensions](./screenshots/dimensions.png)
 
+| Parameter name | Description |
+|----------------|-------------|
+| Width | garage width |
+| Length | garage length |
+
+![roof](./screenshots/roof.png)
+
+| Parameter name | Description |
+|----------------|-------------|
+| Roof type | type of roof |
+| Material type | type of roof's material |
+| Color | color of roof's material |
+
+![height](./screenshots/height.png)
+| Parameter name | Description |
+|----------------|-------------|
+| Minimal | minimal roof height |
+| Maximal | maximal roof height |
+
+![walls](./screenshots/walls.png)
+| Parameter name | Description |
+|----------------|-------------|
+| Material type | type of walls material |
+| Color | color of walls material |
+
+![gate](./screenshots/gate.png)
+| Parameter name | Description |
+|----------------|-------------|
+| Gate type | type of gate |
+| Gate position | position of gate |
+| Material type | type of walls material |
+| Color | color of walls material |
+| Width | gate's width |
+| Length | gate's length |
+
+![doors](./screenshots/doors.png)
+| Parameter name | Description |
+|----------------|-------------|
+| Doors count | amount of doors |
+| Wall | wall on which door is placed |
+| Position | door's position |
+| Material type | type of door's material |
+| Color | color of door's material |
+
+![windows](./screenshots/windows.png)
+| Parameter name | Description |
+|----------------|-------------|
+| Windows count | amount of windows |
+| Type | determines window's dimensions |
+| Wall | wall on which window is placed |
+| Position horizontally | windows's horizontal position |
+| Position vertically | windows's vertical position |
 
 ## Warnings
 
